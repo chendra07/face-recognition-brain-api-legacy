@@ -4,6 +4,12 @@ import cors from "cors";
 import knex from "knex";
 import dotenv from "dotenv";
 
+//components
+import register from "./controllers/register.js";
+import signIn from "./controllers/signin.js";
+import profile from "./controllers/profile.js";
+import image from "./controllers/image.js";
+
 const app = express();
 app.use(express.json()); //body parser
 app.use(cors());
@@ -37,114 +43,21 @@ app.listen(PORT_NUM, () => {
 });
 
 app.get("/", (req, res) => {
-  res.json({ test: "test" });
+  res.json({ message: "connected" });
 });
 
 app.post("/signin", (req, res) => {
-  const { email, password } = req.body;
-  // comparePassword(password, hash);
-  db.select("email", "hash")
-    .from("login")
-    .where("email", "=", email)
-    .then((data) => {
-      const isValid = comparePassword(password, data[0].hash);
-      if (isValid) {
-        return db
-          .select("*")
-          .from("users")
-          .where("email", "=", email)
-          .then((user) => {
-            res.json({
-              loginStatus: "success",
-              ...user[0],
-            });
-          })
-          .catch((error) => {
-            console.log(error);
-            res
-              .status(400)
-              .json({ loginStatus: "failed", message: "Unable to get user" });
-          });
-      } else {
-        res
-          .status(400)
-          .json({ loginStatus: "failed", message: "wrong credentials" });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res
-        .status(500)
-        .json({ loginStatus: "failed", message: "internal server error" });
-    });
+  signIn.handleSignIn(req, res, db, comparePassword);
 });
 
 app.post("/register", (req, res) => {
-  const { email, password, name } = req.body;
-  let hash = hashPassword(password);
-  // console.log("hash: ", hashPassword(password));
-  db.transaction((trx) => {
-    trx
-      .insert({
-        hash: hash,
-        email: email,
-      })
-      .into("login")
-      .returning("email")
-      .then((loginEmail) => {
-        return trx("users")
-          .returning("*") //return all data from column
-          .insert({
-            email: loginEmail[0].email,
-            name: name,
-            joined: new Date(),
-          })
-          .then((newUser) => {
-            res.json({
-              registerStatus: "success",
-              ...newUser[0],
-            });
-          })
-          .then(trx.commit)
-          .catch(trx.rollback);
-      })
-      .catch((error) => {
-        console.log(error);
-        res.status(400).json({
-          registerStatus: "failed",
-          message: "unable to register",
-        });
-      });
-  });
+  register.handleRegsiter(req, res, db, hashPassword);
 });
 
 app.get("/profile/:id", (req, res) => {
-  const { id } = req.params;
-  db.select("*")
-    .from("users")
-    .where({ id: id })
-    .then((user) => {
-      if (user.length >= 1) {
-        res.json(user[0]);
-      } else {
-        res.status(400).json({ message: "user not found" });
-      }
-    })
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json({ message: "internal server error" });
-    });
+  profile.getProfile(req, res, db);
 });
 
 app.put("/image", (req, res) => {
-  const { id } = req.body;
-  db("users")
-    .where({ id: id })
-    .increment("entries", 1)
-    .returning("entries")
-    .then((entries) => res.json({ entries: entries[0].entries }))
-    .catch((error) => {
-      console.log(error);
-      res.status(500).json({ message: "internal server error" });
-    });
+  image.getImagePosition(req, res, db);
 });
