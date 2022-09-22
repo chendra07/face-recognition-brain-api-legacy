@@ -1,8 +1,14 @@
 const handleRegsiter = (req, res, db, hashPassword) => {
   const { email, password, name } = req.body;
-  let hash = hashPassword(password);
+  if (!email || !name || !password) {
+    return res.status(400).json({
+      registerStatus: "failed",
+      message: "incorrect submission",
+    });
+  }
   // console.log("hash: ", hashPassword(password));
   db.transaction((trx) => {
+    let hash = hashPassword(password);
     trx
       .insert({
         hash: hash,

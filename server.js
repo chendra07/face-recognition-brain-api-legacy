@@ -59,5 +59,9 @@ app.get("/profile/:id", (req, res) => {
 });
 
 app.put("/image", (req, res) => {
-  image.getImagePosition(req, res, db);
+  image.incrementUserEntries(req, res, db);
+});
+
+app.post("/imageUrl", (req, res) => {
+  image.HandleClarifaiApiCall(req, res);
 });

@@ -1,6 +1,11 @@
 const handleSignIn = (req, res, db, comparePassword) => {
   const { email, password } = req.body;
-  // comparePassword(password, hash);
+  if (!email || !password) {
+    return res.status(400).json({
+      loginStatus: "failed",
+      message: "incorrect submission",
+    });
+  }
   db.select("email", "hash")
     .from("login")
     .where("email", "=", email)
