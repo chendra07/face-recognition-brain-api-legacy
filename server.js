@@ -13,7 +13,7 @@ import image from "./controllers/image.js";
 const app = express();
 app.use(express.json()); //body parser
 app.use(cors());
-const PORT_NUM = 2000;
+// const PORT_NUM = 2000;
 const saltRounds = 12;
 dotenv.config();
 
@@ -38,8 +38,8 @@ function comparePassword(password, hash) {
   return bcrypt.compareSync(password, hash);
 }
 
-app.listen(PORT_NUM, () => {
-  console.log("App is running on port: ", PORT_NUM);
+app.listen(`${PORT}`, () => {
+  console.log("App is running");
 });
 
 app.get("/", (req, res) => {
