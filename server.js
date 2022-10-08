@@ -17,17 +17,18 @@ const app = express();
 
 app.use(express.json()); //body parser
 // app.use(
-//   cors({
-//     origin: function (origin, callback) {
-//       if (whitelist.indexOf(origin) !== -1) {
-//         callback(null, true);
-//       } else {
-//         callback(new Error("Not allowed by CORS"));
-//       }
-//     },
-//   })
+cors();
+//   {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// }
 // );
-// const PORT = 2000;
+const PORT = 2000;
 const saltRounds = 12;
 
 const db = knex({
@@ -51,8 +52,8 @@ function comparePassword(password, hash) {
   return bcrypt.compareSync(password, hash);
 }
 
-app.listen(process.env.PORT, () => {
-  console.log("App is running");
+app.listen(process.env.PORT || PORT, () => {
+  console.log("App is running on: ", process.env.PORT);
 });
 
 app.get("/", (req, res) => {
