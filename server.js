@@ -34,7 +34,7 @@ const saltRounds = 12;
 const db = knex({
   client: "pg",
   connection: {
-    host: process.env.DATABASE_URL,
+    connectionString: process.env.DATABASE_URL,
     ssl: true,
     // port: process.env.DB_PORT,
     // user: process.env.DB_USER,
