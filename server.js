@@ -16,16 +16,18 @@ const app = express();
 // console.log("whitelist: ", whitelist);
 
 app.use(cors());
-app.use(express.json()); //body parser
-//   {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true);
-//     } else {
-//       callback(new Error("Not allowed by CORS"));
-//     }
-//   },
-// }
+app.use(
+  express.json({
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+); //body parser
+
 const PORT = 2000;
 const saltRounds = 12;
 
@@ -33,7 +35,7 @@ const db = knex({
   client: "pg",
   connection: {
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    ssl: true,
     // port: process.env.DB_PORT,
     // user: process.env.DB_USER,
     // password: process.env.DB_PASS,
