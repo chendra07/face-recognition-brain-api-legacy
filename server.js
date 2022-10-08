@@ -15,9 +15,8 @@ const app = express();
 const whitelist = process.env.FRONTEND_BASEURL.split(", ");
 console.log("whitelist: ", whitelist);
 
-app.use(cors());
 app.use(
-  express.json({
+  cors({
     origin: function (origin, callback) {
       if (whitelist.indexOf(origin) !== -1) {
         callback(null, true);
@@ -26,7 +25,7 @@ app.use(
       }
     },
   })
-); //body parser
+);
 
 const PORT = 2000;
 const saltRounds = 12;
