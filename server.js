@@ -15,19 +15,17 @@ const app = express();
 // const whitelist = process.env.FRONTEND_BASEURL.split(", ");
 // console.log("whitelist: ", whitelist);
 
+app.use(cors());
 app.use(express.json()); //body parser
-app.use(
-  cors()
-  //   {
-  //   origin: function (origin, callback) {
-  //     if (whitelist.indexOf(origin) !== -1) {
-  //       callback(null, true);
-  //     } else {
-  //       callback(new Error("Not allowed by CORS"));
-  //     }
-  //   },
-  // }
-);
+//   {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// }
 const PORT = 2000;
 const saltRounds = 12;
 
