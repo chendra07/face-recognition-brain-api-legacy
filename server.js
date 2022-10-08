@@ -12,22 +12,22 @@ import image from "./controllers/image.js";
 
 dotenv.config();
 const app = express();
-const whitelist = process.env.FRONTEND_BASEURL.split(", ");
-console.log("whitelist: ", whitelist);
+// const whitelist = process.env.FRONTEND_BASEURL.split(", ");
+// console.log("whitelist: ", whitelist);
 
 app.use(express.json()); //body parser
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-  })
-);
-const PORT = 2000;
+// app.use(
+//   cors({
+//     origin: function (origin, callback) {
+//       if (whitelist.indexOf(origin) !== -1) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//   })
+// );
+// const PORT = 2000;
 const saltRounds = 12;
 
 const db = knex({
@@ -51,7 +51,7 @@ function comparePassword(password, hash) {
   return bcrypt.compareSync(password, hash);
 }
 
-app.listen(PORT, () => {
+app.listen(process.env.PORT, () => {
   console.log("App is running");
 });
 
