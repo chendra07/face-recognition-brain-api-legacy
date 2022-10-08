@@ -10,12 +10,25 @@ import signIn from "./controllers/signin.js";
 import profile from "./controllers/profile.js";
 import image from "./controllers/image.js";
 
-const app = express();
-app.use(express.json()); //body parser
-app.use(cors());
-// const PORT_NUM = 2000;
-const saltRounds = 12;
 dotenv.config();
+const app = express();
+const whitelist = process.env.FRONTEND_BASEURL.split(", ");
+console.log("whitelist: ", whitelist);
+
+app.use(express.json()); //body parser
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (whitelist.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+  })
+);
+const PORT = 2000;
+const saltRounds = 12;
 
 const db = knex({
   client: "pg",
@@ -38,7 +51,7 @@ function comparePassword(password, hash) {
   return bcrypt.compareSync(password, hash);
 }
 
-app.listen(`${PORT}`, () => {
+app.listen(PORT, () => {
   console.log("App is running");
 });
 
