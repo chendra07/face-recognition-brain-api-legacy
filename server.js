@@ -12,8 +12,8 @@ import image from "./controllers/image.js";
 
 dotenv.config();
 const app = express();
-// const whitelist = process.env.FRONTEND_BASEURL.split(", ");
-// console.log("whitelist: ", whitelist);
+const whitelist = process.env.FRONTEND_BASEURL.split(", ");
+console.log("whitelist: ", whitelist);
 
 app.use(cors());
 app.use(
