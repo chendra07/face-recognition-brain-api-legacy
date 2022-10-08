@@ -1,5 +1,6 @@
 const handleRegsiter = (req, res, db, hashPassword) => {
   const { email, password, name } = req.body;
+  console.log(req.body);
   if (!email || !name || !password) {
     return res.status(400).json({
       registerStatus: "failed",
