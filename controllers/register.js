@@ -1,5 +1,5 @@
 const handleRegsiter = (req, res, db, hashPassword) => {
-  console.log("Bodyyyyyyy: ", req.body);
+  // console.log("Bodyyyyyyy: ", req.body);
   const { email, password, name } = req.body;
   if (!email || !name || !password) {
     return res.status(400).json({
@@ -51,4 +51,4 @@ const handleRegsiter = (req, res, db, hashPassword) => {
   });
 };
 
-export default { handleRegsiter };
+module.exports = { handleRegsiter };

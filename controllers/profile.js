@@ -16,6 +16,6 @@ const getProfile = (req, res, db) => {
     });
 };
 
-export default {
+module.exports = {
   getProfile,
 };

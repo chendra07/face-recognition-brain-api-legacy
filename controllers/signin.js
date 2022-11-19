@@ -42,6 +42,6 @@ const handleSignIn = (req, res, db, comparePassword) => {
     });
 };
 
-export default {
+module.exports = {
   handleSignIn,
 };

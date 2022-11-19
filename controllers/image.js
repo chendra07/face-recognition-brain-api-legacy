@@ -18,7 +18,7 @@ const HandleClarifaiApiCall = (req, res) => {
     ],
   });
 
-  fetch("https://api.clarifai.com/v2/models/" + MODEL_ID + "/outputs", {
+  fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/outputs`, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -35,7 +35,7 @@ const incrementUserEntries = (req, res, db) => {
   db("users")
     .where({ id: id })
     .increment("entries", 1)
-    .returning("entries")
+    .returning("entries") //RETURNING clause allows you to retrieve values of columns
     .then((entries) => res.json({ entries: entries[0].entries }))
     .catch((error) => {
       console.log(error);
@@ -43,7 +43,7 @@ const incrementUserEntries = (req, res, db) => {
     });
 };
 
-export default {
+module.exports = {
   incrementUserEntries,
   HandleClarifaiApiCall,
 };
